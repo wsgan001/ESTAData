@@ -1,0 +1,34 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" name="EstaDataBMConfig">
+
+	<!-- Tell BigMemory where to write its data to disk. -->
+	<diskStore path="./bigmemory.db" />
+
+	<!-- set 'maxBytesLocalOffHeap' to the amount of off-heap memory you want 
+		to use. This memory is invisible to the Java garbage collector, providing 
+		gigabytes to terabytes of in-memory data without garbage collection pauses. -->
+	<cache name="clustersCache" maxBytesLocalHeap="128M" maxBytesLocalOffHeap="256M"
+		maxEntriesLocalDisk="0"
+		statistics="true" eternal="true" overflowToOffHeap="true">
+		<searchable>
+			<searchAttribute name="label" expression="value.getLabel()" />
+		</searchable>
+		<!-- Tell BigMemory to use the 'localRestartable' persistence strategy 
+			for fast restart (optional). -->
+		<persistence strategy="localRestartable" />
+	</cache>
+	
+	<cache name="pointsCache" maxBytesLocalHeap="256M" maxBytesLocalOffHeap="4G"
+		maxEntriesLocalDisk="0"
+		statistics="true" eternal="true" overflowToOffHeap="true">
+		<searchable>
+			<searchAttribute name="lat" expression="value.getLat()" />
+			<searchAttribute name="lon" expression="value.getLon()" />
+            <searchAttribute name="clusterLabel" expression="value.getClusterID()" />
+            <searchAttribute name="creationTime" expression="value.getCreationTime()" />
+		</searchable>
+		<!-- Tell BigMemory to use the 'localRestartable' persistence strategy 
+			for fast restart (optional). -->
+		<persistence strategy="localRestartable" />
+	</cache>
+</ehcache>
